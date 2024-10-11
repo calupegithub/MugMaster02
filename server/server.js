@@ -34,7 +34,7 @@ app.get('/lastButton', (req, res) => {
 	res.json({ lastButtonPressed });
 });
 
-// Crear servidor HTTP a partir de la app de Express
+/git 
 const httpServer = createServer(app);
 
 // Inicializar Socket.IO
