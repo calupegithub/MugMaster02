@@ -1,5 +1,7 @@
 import { router, socket } from "../routes.js";
 
+// socket.on para escuchar el server
+
 export default function gamePage() {
   const app = document.getElementById("app");
   app.innerHTML = `
@@ -18,4 +20,6 @@ export default function gamePage() {
   router.navigateTo("/screen6");
   // socket.emit("event2");
 });
+
 }
+ 

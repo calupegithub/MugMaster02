@@ -34,7 +34,6 @@ app.get('/lastButton', (req, res) => {
 	res.json({ lastButtonPressed });
 });
 
-/git 
 const httpServer = createServer(app);
 
 // Inicializar Socket.IO

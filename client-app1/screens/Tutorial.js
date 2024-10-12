@@ -1,5 +1,6 @@
 import { router, socket } from "../routes.js";
 
+
 export default function tutorialPage() {
   const app = document.getElementById("app");
   app.innerHTML = `

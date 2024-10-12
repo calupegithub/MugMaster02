@@ -1,5 +1,6 @@
 import { router, socket } from "../routes.js";
 
+
 export default function landingPage() {
   const app = document.getElementById("app");
   app.innerHTML = `
@@ -14,3 +15,5 @@ export default function landingPage() {
     router.navigateTo("/screen2");
   });
 }
+
+//Accederemos a serverEvents para hacer el router.navigateTo
