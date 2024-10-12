@@ -25,32 +25,32 @@ router.add("/", async () => {
   landingPage();
 });
 
-router.add("/screen2", async () => {
+router.add("/tutorialPage", async () => {
   clearScripts();
   tutorialPage();
 });
 
-router.add("/screen3", async () => {
+router.add("/loadPage", async () => {
   clearScripts();
   loadPage();
 });
 
-router.add("/screen4", async () => {
+router.add("/gamePage", async () => {
   clearScripts();
   gamePage();
 });
 
-router.add("/screen5", async () => {
+router.add("/winPage", async () => {
   clearScripts();
   winPage();
 });
 
-router.add("/screen6", async () => {
+router.add("/losePage", async () => {
   clearScripts();
   losePage();
 });
 
-router.add("/screen7", async () => {
+router.add("/qrPage", async () => {
   clearScripts();
   qrPage();
 });
