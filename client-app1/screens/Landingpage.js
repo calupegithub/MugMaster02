@@ -10,10 +10,11 @@ export default function landingPage() {
         <button id="nextPage">(Boton invisible)</button>
     `;
 
-  document.getElementById("nextPage").addEventListener("click", () => {
-    socket.emit("event1", { message: "Un nuevo juego ha empezado" });
-    router.navigateTo("/screen2");
+  document.getElementById('nextPage').addEventListener('click', ()=>{
+    socket.emit('changeScreen')
+  })
+
+  socket.on('navigateTo', (screen)=>{
+    router.navigateTo(screen);
   });
 }
-
-//Accederemos a serverEvents para hacer el router.navigateTo
