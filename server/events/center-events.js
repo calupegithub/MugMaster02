@@ -1,7 +1,7 @@
 const db = require("../db");
 
 const { changeScreen, verifyKeys, animationKeys } = require("../events-server/events-server")
-const { reciveKeys, reciveAnimation } = require("../events-users/eventsExampleHandlers")
+const { reciveKeys, reciveAnimation } = require("../events-users/events-user")
 const { keyspressed } = require("../events-arduino/arduino-events");
 
 
