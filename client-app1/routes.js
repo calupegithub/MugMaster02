@@ -8,6 +8,8 @@ import qrPage  from "./screens/Qrpage.js"
 
 import socket from "./socket.js";
 
+export let Screen;
+
 const router = new Router({ // check this for more features with Router: https://github.com/Graidenix/vanilla-router
   mode: "hash",
   page404: (path) => {
@@ -21,17 +23,23 @@ function clearScripts() {
 }
 
 router.add("/", async () => {
+  Screen = 'landingPage';
+  console.log(Screen);
   clearScripts();
   landingPage();
 });
 
 
 router.add("/tutorialPage", async () => {
+  Screen = 'tutorialPage';
+  console.log(Screen);
   clearScripts();
   tutorialPage();
 });
 
 router.add("/loadPage", async () => {
+  Screen = 'loadPage';
+  console.log(Screen);
   clearScripts();
   loadPage();
 });
