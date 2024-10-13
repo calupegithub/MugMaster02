@@ -1,7 +1,8 @@
+  
 
   
-  const changeScreen = (socket, db, io) => {
-
+  const changeScreen = (socket, io) => {
+          socket.emit('navigateTo', 'tutorialPage')
   };  
 
   // const randomKeys = (socket, db, io) => {
@@ -20,7 +21,6 @@
 
   module.exports = {
     changeScreen,
-    randomKeys,
     verifyKeys,
     animationKeys
   };
