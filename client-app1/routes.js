@@ -25,6 +25,7 @@ router.add("/", async () => {
   landingPage();
 });
 
+
 router.add("/tutorialPage", async () => {
   clearScripts();
   tutorialPage();
