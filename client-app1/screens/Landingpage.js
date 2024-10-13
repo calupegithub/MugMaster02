@@ -14,6 +14,7 @@ export default function landingPage() {
     socket.emit('changeScreen')
   })
 
+  
   socket.on('navigateTo', (screen)=>{
     router.navigateTo(screen);
   });
