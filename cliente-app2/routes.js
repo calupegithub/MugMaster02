@@ -1,9 +1,8 @@
 import landingForm from "./screensQR/Landingform.js"
-import consume from "./screensQR/consume.js"
+import consume from './screensQR/consume.js';
 import loading from "./screensQR/Loading.js"
 import email from "./screensQR/Email.js"
 import error from "./screensQR/Error.js"
-
 
 import socket from "./socket.js";
 
@@ -27,7 +26,6 @@ router.add("/", async () => {
   clearScripts();
   landingForm();
 });
-
 
 router.add("/consume", async () => {
   Screen = 'consume';
@@ -71,3 +69,4 @@ document.addEventListener("DOMContentLoaded", () => {
 router.check();
 
 export { router, socket };
+
