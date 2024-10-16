@@ -14,7 +14,7 @@ const express = require('express');
 const { createServer } = require('http');
 const { initSocket, getIO } = require('./socket.js');
 const { SerialPort, ReadlineParser } = require('serialport');
-const { changeScreen } = require('./events-server/events-server.js');
+//const { changeScreen } = require('./events-server/events-server.js');
 
 const app = express();
 let lastButtonPressed = '';
