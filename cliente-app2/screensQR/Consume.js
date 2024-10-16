@@ -1,8 +1,8 @@
 import { router, socket } from '../routes.js'; // Importing router and socket
 
 export default function consume() {
-    const app = document.getElementById('app');
-    app.innerHTML = `
+	const app = document.getElementById('app');
+	app.innerHTML = `
         <h1>What do you usually consume at Starbucks?</h1>
         <div class="options">
             <div class="option" id="cold-drinks">
@@ -31,37 +31,43 @@ export default function consume() {
             </div>
         </div>
         <button id="submit">Submit</button>
+        <button id="nextPage">Go to Screen 4</button>
     `;
 
-    let selectedOption = null;
+	let selectedOption = null;
 
-    // Add event listeners for the options
-    const options = document.querySelectorAll('.option');
-    options.forEach(option => {
-        option.addEventListener('click', () => {
-            // Remove selected class from all options
-            options.forEach(opt => opt.classList.remove('selected'));
-            // Add selected class to the clicked option
-            option.classList.add('selected');
-            selectedOption = option.id; // Get the id of the selected option
-        });
-    });
+	// Add event listeners for the options
+	const options = document.querySelectorAll('.option');
+	options.forEach((option) => {
+		option.addEventListener('click', () => {
+			// Remove selected class from all options
+			options.forEach((opt) => opt.classList.remove('selected'));
+			// Add selected class to the clicked option
+			option.classList.add('selected');
+			selectedOption = option.id; // Get the id of the selected option
+		});
+	});
 
-    document.getElementById('submit').addEventListener('click', () => {
-        if (selectedOption) {
-            // Emit the selected option to the server
-            socket.emit('submitSurvey', selectedOption);
-            alert(`You selected: ${selectedOption.replace(/-/g, ' ')}`);
+	document.getElementById('submit').addEventListener('click', () => {
+		if (selectedOption) {
+			// Emit the selected option to the server
+			socket.emit('submitSurvey', selectedOption);
+			alert(`You selected: ${selectedOption.replace(/-/g, ' ')}`);
 
-            // Emit 'changeScreen' event to navigate to another screen if needed
-            socket.emit('changeScreen');
-        } else {
-            alert("Please select an option before submitting.");
-        }
-    });
+			// Emit 'changeScreen' event to navigate to another screen if needed
+			socket.emit('changeScreen');
+		} else {
+			alert('Please select an option before submitting.');
+		}
+	});
 
-    // Listen for 'navigateTo' event and navigate to the received page
-    socket.on('navigateTo', (screensQR) => {
-        router.navigateTo(screensQR); // Navigate to the page sent by the server
-    });
+	// Add event listener for the next page button
+	document.getElementById('nextPage').addEventListener('click', () => {
+		router.navigateTo('/loading');
+	});
+
+	// Listen for 'navigateTo' event and navigate to the received page
+	socket.on('navigateTo', (screensQR) => {
+		router.navigateTo(screensQR); // Navigate to the page sent by the server
+	});
 }
