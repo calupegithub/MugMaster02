@@ -49,75 +49,129 @@
 // app.use(express.json());
 // app.use(express.urlencoded({ extended: true }));
 
-const express = require('express');
-const cors = require('cors'); // Import CORS package
-const { createServer } = require('http');
-const { initSocket, getIO } = require('./socket.js');
-const { SerialPort, ReadlineParser } = require('serialport');
-//const { changeScreen } = require('./events-server/events-server.js');
-const { changeScreen } = require('./events-server/events-server.js');
-// const { initSocket } = require('./socket.js'); // Socket logic
-const path = require('path'); // To serve static files
+const express = require("express");
+const cors = require("cors"); // Import CORS package
+const { createServer } = require("http");
+const { SerialPort, ReadlineParser } = require("serialport");
+const path = require("path"); // To serve static files
 
+const { initSocket, getIO } = require("./socket.js");
+const { delay, getPaginaActual } = require("./utils/helpers.js");
+
+// Creamos servidor express
 const app = express();
 
 // Enable CORS for all routes
 app.use(cors());
 
 // The last button pressed
-let lastButtonPressed = '';
+let lastButtonPressed = "";
+// Para seguimiento de la pag que esta mostrando el front
+//paginaActual = "landingPage";
 
-//Leer datos del Arduino
-const port = new SerialPort({ path: 'COM4', baudRate: 9600 });
+/*************************
+   Leer datos del Arduino
+**************************/
+// Abrir puerto serial por donde escuchar al Arduino
+//const port = new SerialPort({ path: "COM4", baudRate: 9600 });
+// Escuhcar el flujo de datos del puerto
+//const datosFromArduino = port.pipe(new ReadlineParser({ delimiter: "\n" }));
+/*
+// CallBack para saber cuando llegan datos
+datosFromArduino.on("data", (data) => {
+  console.log(`Datos recibidos del Arduino: ${data}`);
+  try {
+    // Obtenemos el objeto del flujo de datos enviados desde Arduino
+    // El JSON es de la forma { "flecha" : 1}
+    //TODO: Validar estructura Json
+    const buttonData = JSON.parse(data.trim());
 
-const parser = port.pipe(new ReadlineParser({ delimiter: '\n' }));
+    // Validar si se presiono una flecha
+    if ("flecha" in buttonData) {
+      if (paginaActual === "landingPage") {
+        // Si estamos en tutorialPage le emitimos al front que cambie de screen
+        getIO().emit("navigateTo", "tutorialPage");
+        paginaActual = "tutorialPage";
+        console.log("Boton procesado<landingPage>:", buttonData);
+        return;
+      }
 
-let paginaActual = 'landingPage';
+      if (paginaActual === "tutorialPage") {
+        // Si estamos en tutorialPage le emitimos al front que cambie de screen
+        getIO().emit("navigateTo", "loadPage");
+        paginaActual = "loadPage";
+        console.log("Boton procesado<tutorialPage>:", buttonData);
+        return;
+      }
 
-parser.on('data', (data) => {
-	console.log(`Datos recibidos del Arduino: ${data}`);
-	try {
-		const buttonData = JSON.parse(data.trim());
-		if ('flecha' in buttonData) {
-			if (paginaActual === 'landingPage') {
-				getIO().emit('navigateTo', 'tutorialPage');
-				paginaActual = 'tutorialPage';
-				return;
-			}
+      if (paginaActual === "loadPage") {
+        // Si estamos en loadPage y pulsa botones no hacemos nada
+        // hasta que termine la secuencia de animacion en el front
+        console.log("Boton procesado<loadPage>:", buttonData);
+        return;
+      }
 
-			if (paginaActual === 'tutorialPage') {
-				getIO().emit('navigateTo', 'loadPage');
-				paginaActual = 'loadPage';
-				return;
-			}
+      if (paginaActual === "gamePage") {
+        // Si estamos en gamePage le emitimos al front el boton pulsado
+        getIO().emit("botonPulsado", buttonData.flecha);
 
-			console.log('Botones procesados:', buttonData);
-		}
-	} catch (err) {
-		console.error('Error al parsear JSON:', err);
-	}
+        console.log("Boton procesado<gamePage>:", buttonData);
+        return;
+      }
+
+      console.log("Boton procesad <SinPage>:", buttonData);
+    }
+  } catch (err) {
+    console.error("Error al parsear JSON:", err);
+  }
 });
+*/
 
-// Endpoint para recibir los datos del Arduino
-// Endpoint to receive data from Arduino
-app.post('/button', (req, res) => {
-	const button = req.query.button; // Read 'button' parameter from URL
-	if (button) {
-		lastButtonPressed = button; // Update the last pressed button
-		console.log('Button pressed:', button);
-		res.json({ status: 'success', button });
-	} else {
-		res.status(400).json({ status: 'error', message: 'No button provided' });
-	}
+// Endpoint para recibir los datos del Arduino cuando sea por WiFi
+app.post("/button", (req, res) => {
+  const button = req.query.button; // Read 'button' parameter from URL
+  if (button) {
+    lastButtonPressed = button; // Update the last pressed button
+    console.log("Button pressed:", button);
+    res.json({ status: "success", button });
+  } else {
+    res.status(400).json({ status: "error", message: "No button provided" });
+  }
 });
 
 // Endpoint for Visual Studio to check the last pressed button
-app.get('/lastButton', (req, res) => {
-	res.json({ lastButtonPressed });
+app.get("/lastButton", (req, res) => {
+  res.json({ lastButtonPressed });
+});
+
+// Endpoint para disparar secuencia de pantallas en el front
+// Para hacer pruebas
+app.get("/test", async (req, res) => {
+  res.send("<h2>Test iniciado</h2>");
+
+  await delay(3000);
+  console.log("landingPage");
+  getIO().emit("navigateTo", "/");
+
+  await delay(2000);
+  console.log("tutorialPage");
+  getIO().emit("navigateTo", "tutorialPage");
+
+  await delay(2000);
+  console.log("loadPage");
+  getIO().emit("navigateTo", "loadPage");
+
+  console.log("paginaActual<test>", getPaginaActual());
+
+  console.log("Timers programados...");
+});
+
+app.get("/test2", (req, res) => {
+  res.send(`<h2>Test iniciado</h2><p>${getPaginaActual()}</p>`);
 });
 
 // Serve static files from the client app directory
-app.use(express.static(path.join(__dirname, '../cliente-app2')));
+app.use(express.static(path.join(__dirname, "../cliente-app2")));
 
 // Body parser middleware
 app.use(express.json());
@@ -131,5 +185,5 @@ initSocket(httpServer);
 
 // Start the server on port 5050
 httpServer.listen(5050, () => {
-	console.log('server starting 🚀🆙✔ on http://localhost:5050');
+  console.log("server starting 🚀🆙✔ on http://localhost:5050");
 });

@@ -1,5 +1,5 @@
-import { router, socket } from "../routes.js";
-
+import { router } from "../routes.js";
+import socket from "../socket.js";
 
 export default function winPage() {
   const app = document.getElementById("app");
@@ -14,4 +14,3 @@ export default function winPage() {
     // socket.emit("event2");
   });
 }
-

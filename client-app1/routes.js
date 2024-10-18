@@ -1,16 +1,17 @@
-import landingPage from "./screens/Landingpage.js"
-import tutorialPage from "./screens/tutorial.js"
-import loadPage from "./screens/Loadpage.js"
-import gamePage from "./screens/Gamepage.js"
-import winPage from "./screens/Winpage.js"
-import losePage from "./screens/Losepage.js"
-import qrPage  from "./screens/Qrpage.js"
+import landingPage from "./screens/Landingpage.js";
+import tutorialPage from "./screens/Tutorial.js";
+import loadPage from "./screens/Loadpage.js";
+import gamePage from "./screens/Gamepage.js";
+import winPage from "./screens/Winpage.js";
+import losePage from "./screens/Losepage.js";
+import qrPage from "./screens/Qrpage.js";
 
 import socket from "./socket.js";
 
 export let Screen;
 
-const router = new Router({ // check this for more features with Router: https://github.com/Graidenix/vanilla-router
+const router = new Router({
+  // check this for more features with Router: https://github.com/Graidenix/vanilla-router
   mode: "hash",
   page404: (path) => {
     const app = document.getElementById("app");
@@ -22,59 +23,58 @@ function clearScripts() {
   document.getElementById("app").innerHTML = "";
 }
 
-router.add("/", async () => {
-  Screen = 'landingPage';
+router.add("/", () => {
+  Screen = "landingPage";
   console.log(Screen);
   clearScripts();
   landingPage();
 });
 
-
-router.add("/tutorialPage", async () => {
-  Screen = 'tutorialPage';
+router.add("/tutorialPage", () => {
+  Screen = "tutorialPage";
   console.log(Screen);
   clearScripts();
   tutorialPage();
 });
 
-router.add("/loadPage", async () => {
-  Screen = 'loadPage';
+router.add("/loadPage", () => {
+  Screen = "loadPage";
   console.log(Screen);
   clearScripts();
   loadPage();
 });
 
-router.add("/gamePage", async () => {
+router.add("/gamePage", () => {
   clearScripts();
   gamePage();
 });
 
-router.add("/winPage", async () => {
+router.add("/winPage", () => {
   clearScripts();
   winPage();
 });
 
-router.add("/losePage", async () => {
+router.add("/losePage", () => {
   clearScripts();
   losePage();
 });
 
-router.add("/qrPage", async () => {
+router.add("/qrPage", () => {
   clearScripts();
   qrPage();
 });
 
-router.check().addUriListener();
+router.addUriListener();
 
 // Listen for popstate event to handle browser navigation
-window.addEventListener("popstate", () => {
+/* window.addEventListener("popstate", () => {
   router.check();
 });
-
+*/
 document.addEventListener("DOMContentLoaded", () => {
   router.check();
-});
+}); 
 
-router.check();
+//router.check();
 
-export { router, socket };
+export { router };
